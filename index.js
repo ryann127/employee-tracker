@@ -3,7 +3,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'employees_db'
+    database: 'employee_db'
 },
 console.log(`Connected to employees_db database.`)
 )
@@ -32,7 +32,7 @@ function init() {
 
             break;
             case 'Add a Department':
-
+                deptAdd();
             break;
             case 'Add a Role':
 
@@ -49,7 +49,27 @@ function init() {
 }
 
 function deptView() {
-    connection.query('')
+    connection.query('SELECT department.id, department.dept_name FROM department', function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+        }
+    })
+}
+
+function deptAdd() {
+    inquirer.prompt(
+        {
+            type: 'input',
+            name: 'dept',
+            message: 'What would you like to name the new Department?'
+        }
+    )
+    .then((response) => {
+        connection.query('INSERT INTO department SET ?', response.dept)
+    })
+    
 }
 
 init()

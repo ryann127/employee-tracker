@@ -26,10 +26,10 @@ function init() {
                 deptView();
             break;
             case 'View All Roles':
-                
+                roleView();
             break;
             case 'View All Employees':
-
+                empView();
             break;
             case 'Add a Department':
                 deptAdd();
@@ -50,6 +50,26 @@ function init() {
 
 function deptView() {
     connection.query('SELECT department.id, department.dept_name FROM department', function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+        }
+    })
+}
+
+function roleView() {
+    connection.query('SELECT empRole.id, empRole.title, empRole.salary, empRole.dept_id FROM empRole', function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+        }
+    })
+}
+
+function empView() {
+    connection.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id FROM employee', function(err, result) {
         if (err) {
             console.log(err);
         } else {

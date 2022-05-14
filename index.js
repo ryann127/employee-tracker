@@ -1,7 +1,6 @@
 const mysql = require('mysql2');
-const consoleTable = require('console.table');
 const inquirer = require('inquirer')
-
+const cTable = require ('console.table');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -63,7 +62,8 @@ function deptView() {
         if (err) {
             console.log(err);
         } else {
-            console.log(result);
+            // console.log(result);
+            console.table(result);
         }
         init();
     })
@@ -74,7 +74,7 @@ function roleView() {
         if (err) {
             console.log(err);
         } else {
-            console.log(result);
+            console.table(result);
         }
         init();
     })
@@ -85,7 +85,7 @@ function empView() {
         if (err) {
             console.log(err);
         } else {
-            console.log(result);
+            console.table(result);
         }
         init();
     })
@@ -105,7 +105,7 @@ function deptAdd() {
                     console.log(err)
                 } else {
                     console.log('Department Added!')
-                    consoleTable(result)
+                    console.table(result)
                 }
                 init();
             })
@@ -147,6 +147,34 @@ function roleAdd(){
         })
     })
 }
+
+// function employeeAdd(){
+//     inquirer.prompt (
+//         [{
+//             type: 'input',
+//             name: 'empFirst',
+//             message: 'What is the title of the new role?'
+//         },
+//         {
+//             type: 'input', 
+//             name: 'empLast',
+//             message: 'Please enter a Salary for the new role:'
+//         },
+//         {
+//             type: 'list',
+//             name: 'empRoleId',
+//             choices: roleList,
+//             message: "What roles does the new Employee have?"
+//         },
+//         {
+//             type: 'input',
+//             name: 'empManId',
+//             choices: employeeList,
+//             message: "Who is the new employee's Manager?"
+
+//         }
+//     ]
+//     )
 
 
         

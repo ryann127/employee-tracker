@@ -16,7 +16,7 @@ function init() {
             type: 'list',
             name: 'option',
             message: 'Where would you like to begin?',
-            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role'],
+            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role', 'Quit'],
         }
     )
         .then((response) => {
@@ -43,6 +43,9 @@ function init() {
                 case 'Update an Employee Role':
 
                     break;
+                case 'Quit':
+                    connection.end();
+                    break;
 
             }
         })
@@ -55,6 +58,7 @@ function deptView() {
         } else {
             console.log(result);
         }
+        init();
     })
 }
 
@@ -65,6 +69,7 @@ function roleView() {
         } else {
             console.log(result);
         }
+        init();
     })
 }
 
@@ -75,6 +80,7 @@ function empView() {
         } else {
             console.log(result);
         }
+        init();
     })
 }
 
@@ -93,6 +99,7 @@ function deptAdd() {
                 } else {
                     console.log('Department Added!')
                 }
+                init();
             })
         })
 }

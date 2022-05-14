@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
+const inquirer = require('inquirer')
 
 
 const connection = mysql.createConnection({
@@ -11,7 +12,10 @@ const connection = mysql.createConnection({
     console.log(`Connected to employees_db database.`)
 )
 
-const inquirer = require('inquirer');
+const employeeList = [];
+const departmentList = [];
+const roleList = [];
+
 
 function init() {
     inquirer.prompt(
@@ -144,62 +148,6 @@ function roleAdd(){
     })
 }
 
-// function employeeAdd(){
-//     inquirer.prompt (
-//         [{
-//             type: 'input',
-//             name: 'empFirst',
-//             message: 'What is the title of the new role?'
-//         },
-//         {
-//             type: 'input', 
-//             name: 'empLast',
-//             message: 'Please enter a Salary for the new role:'
-//         },
-//         {
-//             type: 'input',
-//             name: 'empRoleId',
-//             message: 'What is the deparment ID for the new role?'
-//         },
-//         {
-//             type: 'input',
-//             name: 'empManId',
-//             message: "Please enter the employee's Manager's ID"
 
-//         }
-//     ]
-//     )
-//     .then((response) => {
-         
-//       let roleId;
-      
-//       db.query(`SELECT (id) FROM roles WHERE title=(?)`, response.employeeRole, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//         } else {
-//           roleId = results[0].id;
-//         }
-
-//         let managerId;
-//         let employeesManager = response.employeeManager.split(' ');
-//         db.query(`SELECT (id) FROM employees WHERE firstName = "${employeesManager[0]}" AND lastName = "${employeesManager[1]}"`, employeesManager, (err, results) => {
-//           if (err) {
-//             console.error(err);
-//           } else {
-//             managerId = results[0].id;
-//           }
-         
-//           db.query(`INSERT INTO employees (firstName, lastName, roleId, managerId) VALUES (?, ?, ?, ?)`, [response.firstName, response.lastName, roleId, managerId], (err, results) => {
-//             if (err) {
-//               console.error(err)
-//             } else {
-//               console.log('\x1b[36m Employee successfully added!');
-//             }
-//           })
-//         })
-//       })
-//       init();
-//     })
-// };
         
 init()

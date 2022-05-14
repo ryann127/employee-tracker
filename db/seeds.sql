@@ -1,3 +1,5 @@
+USE employee_db;
+
 INSERT INTO department (dept_name)
 VALUES ("Executive"), ("Finance"), ("IT"), ("Human Resources"), ("Research");
 

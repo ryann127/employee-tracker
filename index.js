@@ -1,8 +1,11 @@
 const mysql = require('mysql2');
+const consoleTable = require('console.table');
+
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'Mysql127!',
     database: 'employee_db'
 },
     console.log(`Connected to employees_db database.`)
@@ -35,10 +38,10 @@ function init() {
                     deptAdd();
                     break;
                 case 'Add a Role':
-
+                    roleAdd();
                     break;
                 case 'Add an Employee':
-
+                    employeeAdd();
                     break;
                 case 'Update an Employee Role':
 
@@ -98,10 +101,105 @@ function deptAdd() {
                     console.log(err)
                 } else {
                     console.log('Department Added!')
+                    consoleTable(result)
                 }
                 init();
             })
         })
 }
 
+function roleAdd(){
+    inquirer.prompt (
+        [{
+            type: 'input',
+            name: 'roleTitle',
+            message: 'What is the title of the new role?'
+        },
+        {
+            type: 'input', 
+            name: 'roleSalary',
+            message: 'Please enter a Salary for the new role:'
+        },
+        {
+            type: 'input',
+            name: 'roleDid',
+            message: 'What is the deparment ID for the new role?'
+        }
+    ]
+    )
+    .then((response) => {
+        connection.query("INSERT INTO empRole SET ?", {
+            title: response.roleTitle,
+            salary: response.roleSalary,
+            dept_id: response.roleDid
+        }, (err, response) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log('Role Added!')
+                console.table(response)
+            }
+            init();
+        })
+    })
+}
+
+// function employeeAdd(){
+//     inquirer.prompt (
+//         [{
+//             type: 'input',
+//             name: 'empFirst',
+//             message: 'What is the title of the new role?'
+//         },
+//         {
+//             type: 'input', 
+//             name: 'empLast',
+//             message: 'Please enter a Salary for the new role:'
+//         },
+//         {
+//             type: 'input',
+//             name: 'empRoleId',
+//             message: 'What is the deparment ID for the new role?'
+//         },
+//         {
+//             type: 'input',
+//             name: 'empManId',
+//             message: "Please enter the employee's Manager's ID"
+
+//         }
+//     ]
+//     )
+//     .then((response) => {
+         
+//       let roleId;
+      
+//       db.query(`SELECT (id) FROM roles WHERE title=(?)`, response.employeeRole, (err, results) => {
+//         if (err) {
+//           console.error(err);
+//         } else {
+//           roleId = results[0].id;
+//         }
+
+//         let managerId;
+//         let employeesManager = response.employeeManager.split(' ');
+//         db.query(`SELECT (id) FROM employees WHERE firstName = "${employeesManager[0]}" AND lastName = "${employeesManager[1]}"`, employeesManager, (err, results) => {
+//           if (err) {
+//             console.error(err);
+//           } else {
+//             managerId = results[0].id;
+//           }
+         
+//           db.query(`INSERT INTO employees (firstName, lastName, roleId, managerId) VALUES (?, ?, ?, ?)`, [response.firstName, response.lastName, roleId, managerId], (err, results) => {
+//             if (err) {
+//               console.error(err)
+//             } else {
+//               console.log('\x1b[36m Employee successfully added!');
+//             }
+//           })
+//         })
+//       })
+//       init();
+//     })
+// };
+        
 init()

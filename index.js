@@ -148,33 +148,33 @@ function roleAdd(){
     })
 }
 
-// function employeeAdd(){
-//     inquirer.prompt (
-//         [{
-//             type: 'input',
-//             name: 'empFirst',
-//             message: 'What is the title of the new role?'
-//         },
-//         {
-//             type: 'input', 
-//             name: 'empLast',
-//             message: 'Please enter a Salary for the new role:'
-//         },
-//         {
-//             type: 'list',
-//             name: 'empRoleId',
-//             choices: roleList,
-//             message: "What roles does the new Employee have?"
-//         },
-//         {
-//             type: 'input',
-//             name: 'empManId',
-//             choices: employeeList,
-//             message: "Who is the new employee's Manager?"
+function employeeAdd(){
+    inquirer.prompt (
+        [{
+            type: 'input',
+            name: 'empFirst',
+            message: 'What is the title of the new role?'
+        },
+        {
+            type: 'input', 
+            name: 'empLast',
+            message: 'Please enter a Salary for the new role:'
+        },
+        {
+            type: 'list',
+            name: 'empRoleId',
+            choices: roleList,
+            message: "What roles does the new Employee have?"
+        },
+        {
+            type: 'input',
+            name: 'empManId',
+            choices: employeeList,
+            message: "Who is the new employee's Manager?"
 
-//         }
-//     ]
-//     )
+        }
+    ]
+    )
 
 
         

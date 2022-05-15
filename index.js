@@ -84,7 +84,7 @@ function init() {
 }
 
 function deptView() {
-    connection.query('SELECT department.id, department.dept_name FROM department', function (err, result) {
+    connection.query(`SELECT department.id AS ID, department.dept_name AS Department FROM department;`, (err, result) => {
         if (err) {
             console.log(err);
         } else {

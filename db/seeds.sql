@@ -18,8 +18,4 @@ VALUES ("Ryann", "Goldberg", 3, 1),
 ("Maddy", "Dotson", 5, 3),
 ("Orson","Welles", 1, NULL), 
 ("Oscar", "Martinez", 2, NULL),
-("Kelly", "Kapoor", 4, null);
-
-SELECT * FROM department;
-SELECT * FROM empRole;
-SELECT * FROM employee;
+("Kelly", "Kapoor", 4, NULL);

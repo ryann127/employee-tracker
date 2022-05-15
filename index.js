@@ -73,7 +73,7 @@ function init() {
                     employeeAdd();
                     break;
                 case 'Update an Employee Role':
-
+                    updateRole();
                     break;
                 case 'Quit':
                     connection.end();
@@ -211,8 +211,8 @@ function employeeAdd() {
     )
         .then((response) => {
             let roleId;
-            const empManager = response.empManId.split(" ");
             let managerId;
+            const empManager = response.empManId.split(" ");
 
             connection.query(`SELECT (id) FROM empRole WHERE title=(?)`, response.empRoleId, (err, results) => {
                 if (err) {
@@ -227,7 +227,7 @@ function employeeAdd() {
                     } else {
                         managerId = results[0].id
                     }
-                })
+                });
 
                 connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [response.empFirst, response.empLast, roleId, managerId], (err, results) => {
                     if (err) {
@@ -240,7 +240,38 @@ function employeeAdd() {
                 });
             });
         });
+
+    function updateRole() {
+        inquirer.prompt(
+            [
+                {
+                    type: 'list',
+                    name: 'empPromotion',
+                    choices: employeeList,
+                    message: "Whose role would you like to update?",
+                },
+                {
+                    type: 'list',
+                    name: 'newEmpRole',
+                    choices: roleList,
+                    message: "What is the new position for this employee?"
+                }
+            ])
+            .then((response) => {
+                let roleId;
+
+                connection.query(`SELECT (id) FROM empRole WHERE title=(?)`, response.newEmpRole, (err, results) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        roleId = results[0].id;
+                    }
+                })
+            })
+    }
 };
+
+
 
 
 init();

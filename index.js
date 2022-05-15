@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer')
-const cTable = require ('console.table');
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -12,8 +12,34 @@ const connection = mysql.createConnection({
 )
 
 const employeeList = [];
+connection.query(`SELECT * FROM employee`, (err, response) => {
+    if (err) {
+        console.log(err);
+    }
+    for (let emp of response) {
+        employeeList.push(`${emp.empFirst} ${emp.empLast}`);
+    }
+});
+
 const departmentList = [];
+connection.query(`SELECT * FROM department`, (err, response) => {
+    if (err) {
+        console.log(err);
+    }
+    for (let dept of response) {
+        departmentList.push(dept.dept_name);
+    }
+});
+
 const roleList = [];
+connection.query(`SELECT * FROM empRole`, (err, response) => {
+    if (err) {
+        console.log(err);
+    }
+    for (let role of response) {
+        roleList.push(role.title);
+    }
+});
 
 
 function init() {
@@ -112,15 +138,15 @@ function deptAdd() {
         })
 }
 
-function roleAdd(){
-    inquirer.prompt (
+function roleAdd() {
+    inquirer.prompt(
         [{
             type: 'input',
             name: 'roleTitle',
             message: 'What is the title of the new role?'
         },
         {
-            type: 'input', 
+            type: 'input',
             name: 'roleSalary',
             message: 'Please enter a Salary for the new role:'
         },
@@ -129,53 +155,92 @@ function roleAdd(){
             name: 'roleDid',
             message: 'What is the deparment ID for the new role?'
         }
-    ]
+        ]
     )
-    .then((response) => {
-        connection.query("INSERT INTO empRole SET ?", {
-            title: response.roleTitle,
-            salary: response.roleSalary,
-            dept_id: response.roleDid
-        }, (err, response) => {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log('Role Added!')
-                console.table(response)
-            }
-            init();
+        .then((response) => {
+            connection.query("INSERT INTO empRole SET ?", {
+                title: response.roleTitle,
+                salary: response.roleSalary,
+                dept_id: response.roleDid
+            }, (err, response) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('Role Added!')
+                    console.table(response)
+                }
+                init();
+            })
         })
-    })
 }
 
-function employeeAdd(){
-    inquirer.prompt (
-        [{
-            type: 'input',
-            name: 'empFirst',
-            message: 'What is the title of the new role?'
-        },
-        {
-            type: 'input', 
-            name: 'empLast',
-            message: 'Please enter a Salary for the new role:'
-        },
-        {
-            type: 'list',
-            name: 'empRoleId',
-            choices: roleList,
-            message: "What roles does the new Employee have?"
-        },
-        {
-            type: 'input',
-            name: 'empManId',
-            choices: employeeList,
-            message: "Who is the new employee's Manager?"
+function employeeAdd() {
+    inquirer.prompt(
+        [
+            {
+                type: 'input',
+                name: 'empFirst',
+                message: "Please enter employee's first name:"
+            },
+            {
+                type: 'input',
+                name: 'empLast',
+                message: "Please enter employee's last name:"
+            },
+            {
+                type: 'list',
+                name: 'empRoleId',
+                choices: roleList,
+                message: "What roles does the new Employee have?"
+            },
 
-        }
-    ]
+            {
+                type: 'input',
+                name: 'empLast',
+                message: 'Please enter a Salary for the new role:'
+            },
+
+            {
+                type: 'list',
+                name: 'empManId',
+                choices: employeeList,
+                message: "Who is the new employee's Manager?"
+
+            }
+        ]
     )
+        .then((response) => {
+            let roleId;
+            const empManager = response.empManId.split(" ");
+            let managerId;
+
+            connection.query(`SELECT (id) FROM role WHERE title=(?)`, response.role, (err, results) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    roleId = results[0].id
+                }
+
+                connection.query(`SELECT (id) FROM employee WHERE first_name= "${empManager[0]}" AND last_name ="${empManager[1]}`, empManager, (err, results) => {
+                    if (err) {
+                        console.error(err)
+                    } else {
+                        managerId = results[0].id
+                    }
+                })
+
+                connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [response.empFirst, response.empLast, roleId, managerId], (err, results) => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        employeeList.push(`${response.first} ${response.last}`);
+                        console.log('New Employee added!');
+                    }
+                    init();
+                });
+            });
+        });
+};
 
 
-        
-init()
+init();

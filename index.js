@@ -17,7 +17,7 @@ connection.query(`SELECT * FROM employee`, (err, response) => {
         console.log(err);
     }
     for (let emp of response) {
-        employeeList.push(`${emp.empFirst} ${emp.empLast}`);
+        employeeList.push(`${emp.first_name} ${emp.last_name}`);
     }
 });
 
@@ -214,14 +214,14 @@ function employeeAdd() {
             const empManager = response.empManId.split(" ");
             let managerId;
 
-            connection.query(`SELECT (id) FROM role WHERE title=(?)`, response.role, (err, results) => {
+            connection.query(`SELECT (id) FROM empRole WHERE title=(?)`, response.empRoleId, (err, results) => {
                 if (err) {
                     console.log(err)
                 } else {
                     roleId = results[0].id
                 }
 
-                connection.query(`SELECT (id) FROM employee WHERE first_name= "${empManager[0]}" AND last_name ="${empManager[1]}`, empManager, (err, results) => {
+                connection.query(`SELECT (id) FROM employee WHERE first_name=(?) AND last_name=(?)`, [empManager[0], empManager[1]], (err, results) => {
                     if (err) {
                         console.error(err)
                     } else {
@@ -233,7 +233,7 @@ function employeeAdd() {
                     if (err) {
                         console.error(err);
                     } else {
-                        employeeList.push(`${response.first} ${response.last}`);
+                        employeeList.push(`${response.empFirst} ${response.empLast}`);
                         console.log('New Employee added!');
                     }
                     init();

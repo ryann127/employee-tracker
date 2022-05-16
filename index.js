@@ -240,37 +240,54 @@ function employeeAdd() {
                 });
             });
         });
-
-    function updateRole() {
-        inquirer.prompt(
-            [
-                {
-                    type: 'list',
-                    name: 'empPromotion',
-                    choices: employeeList,
-                    message: "Whose role would you like to update?",
-                },
-                {
-                    type: 'list',
-                    name: 'newEmpRole',
-                    choices: roleList,
-                    message: "What is the new position for this employee?"
-                }
-            ])
-            .then((response) => {
-                let roleId;
-
-                connection.query(`SELECT (id) FROM empRole WHERE title=(?)`, response.newEmpRole, (err, results) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        roleId = results[0].id;
-                    }
-                })
-            })
-    }
 };
 
+function updateRole() {
+    inquirer.prompt(
+        [
+            {
+                type: 'list',
+                name: 'empPromotion',
+                choices: employeeList,
+                message: "Whose role would you like to update?",
+            },
+            {
+                type: 'list',
+                name: 'newEmpRole',
+                choices: roleList,
+                message: "What is the new position for this employee?"
+            }
+        ])
+        .then((response) => {
+            let roleId;
+            let empId;
+            let empName = response.empPromotion.split(' ');
+
+            connection.query(`SELECT (id) FROM empRole WHERE title=(?)`, response.newEmpRole, (err, results) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    roleId = results[0].id;
+                }
+
+            connection.query(`SELECT (id) FROM employee WHERE first_name = "${empName[0]}" AND last_name = "${empName[1]}"`, empName, (err, results) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    empId = results[0].id;
+                }
+                connection.query(`UPDATE employee SET role_id = (?) WHERE id = ${empId}`, [roleId], (err, results) => {
+                    if (err) {
+                        console.error(err)
+                    } else {
+                        console.log('Employee promoted!');
+                    }
+                    init();
+                    })
+                })
+            })
+        })
+};
 
 
 

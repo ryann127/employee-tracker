@@ -15,6 +15,8 @@
 ## Description
  This project uses node, MySQL, and javascript to create a tables reflecting departments, employees, and roles. The user is able to view and/or add to department, employee, and role tables. 
 
+ [Guided Walkthrough](https://drive.google.com/file/d/10H8t0urDcxJROce-SfTEr6pN1lW2p9-H/view)
+
  ## Installation
 git clone the following repository: 
 
